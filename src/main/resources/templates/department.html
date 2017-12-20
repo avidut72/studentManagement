@@ -1,43 +1,128 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<title>department page</title>
-	<div th:replace="fragments/header :: header-css" />
-</head>
-<body>
-	<div class="container">
-	<div th:replace="fragments/header :: header" />
-<h1> this is department</h1>
-<form class="form-horizontal" id="submitForm">
-                <fieldset>
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Department Name:</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="hidden" id="departmentId" />
-                            <input type="text" id="departmentName"  class="form-control" style="margin-left: 20px;" />
+	<head>
+		<title>department page</title>
+		<div th:replace="fragments/header :: header-css" />
+	</head>
+	<body>
+		<div th:replace="fragments/header :: header" />
+		<div class="container">
+			<h1>Department Details</h1>
+			<form class="form-horizontal" id="submitForm">
+				<fieldset>
+					<div class="row">
+						<div class="form-group">
+							<label>Department Name:</label>
+						</div>
+						<div class="form-group">
+							<input type="hidden" id="departmentId" />
+							<input type="text" id="departmentName"  class="form-control" style="margin-left: 20px;" />
+						</div>
+						<button type="submit" id="save" class="btn bg-primary"  style="height: 40px; width: 100px; margin-left: 40px;">Save</button>
+					</div>
+				</fieldset>
+			</form>
+			<button onclick="loadDataTable()" class="btn bg-info">Show Data</button>
+			<h1>Department Table</h1>
+			<table id="dptlst" class="table table-striped">
+				<thead>
+					<tr>
+						<th>Department Id</th>
+						<th>Department Name</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="//cdn.datatables.net/1.9.1/js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript">
+			//function to load Data in table
+			function loadDataTable(){	
+				var departments=[];
+				$.ajax({
+					url: "/departments",
+					type: "GET",
+					success: function(response){
+						departments=response;
+						var table=$('#dptlst').DataTable({
+							"aaData": departments,
+							"aoColumns":[
+							{"mDataProp": "departmentId"},
+							{"mDataProp": "departmentName"}
+							],
+							"bDestroy" : true
+						})
+						$.each(table.find('tbody tr'),function(index,element){
+							var tr =$(element);
+							var td1=$('<td/>');
+							var td2=$('<td/>');
+							td1.html('<button class="btn btn-primary" onclick="edit(this)">Edit</button>');
+							tr.append(td1);
+							td2.html('<button class="btn btn-danger" onclick="deleteDepartment(this)">Delete Department</button>');
+							tr.append(td2);
+						})
+					},
+					error: function(error){
 
-                        </div>
-                        <button type="submit" id="save" class="btn bg-primary"  style="height: 40px; width: 100px; margin-left: 40px;">Save </button>
-                    </div>
-                </fieldset>
+					}
+				})
+			} //load dataTable function ends
+			//function to append edit button
+			function edit(buttonRef){
+				//alert('edit clicked');
+				var button=$(buttonRef);
+				var tr=button.closest('tr');
+				var departmentId=tr.find('td:nth-child(1)').text();
+				var departmentName=tr.find('td:nth-child(2)').text();
+				//alert(departmentName);
+				$('#departmentId').val(departmentId);
+			$('#departmentName').val(departmentName);
+			}//function edit ends
+			//function to append delete button
+			function deleteDepartment(buttonRef){
+				var button=$(buttonRef);
+				var tr=button.closest('tr');
+				var departmentId=tr.find('td:nth-child(1)').text();
+				//alert(departmentId);
+				$.ajax({
+					url: '/departments?departmentId='+departmentId,
+					type: 'DELETE',
+					success: function(response){
+						loadDataTable();
+					}
+				})
+			}//function deleteDepartment ends here
 
-            </form>
-        </div>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-        <script type="text/javascript">
-        	$(document).ready(function(){
-$('#submitForm').submit(function(event){
-	event.preventDefault();
-	saveDepartment();
-});
-
-function saveDepartment(){
-var departmentName=$('#departmentName').val();
-alert(departmentName);
-}
-        	});
-        </script>
-</body>
+			//java script starts
+			$(document).ready(function(){
+				$('#submitForm').submit(function(event){
+					event.preventDefault();
+					saveDepartment();
+				});
+				//function to save data
+				function saveDepartment(){
+					var department={};
+					//alert('im clicked');
+					department.departmentName=$('#departmentName').val();
+					department.departmentId=$('#departmentId').val();
+					//alert(department.departmentName);
+					$.ajax({
+						url: "/departments",
+						type: "POST",
+						contentType: "application/json",
+						data: JSON.stringify(department),
+						dataType: "json",
+						success: function(response){
+							alert('successfully saved')
+						},
+						error: function(error){
+							//alert('error')
+							loadDataTable();
+						}
+					});
+				}
+			});
+		</script>
+	</body>
 </html>

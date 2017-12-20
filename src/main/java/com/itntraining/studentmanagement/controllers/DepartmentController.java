@@ -22,8 +22,8 @@ public class DepartmentController {
 	private DepartmentRepository departmentRepository;
 	@PostMapping("/departments")
 	public ResponseEntity<?>saveDepartment(@RequestBody Department department){
-		departmentRepository.save(department);
-		return ResponseEntity.ok("saved");
+                departmentRepository.save(department);
+                return ResponseEntity.ok("saved");
 		
 	}
 	@GetMapping("/departments")
@@ -34,7 +34,7 @@ public class DepartmentController {
 	@Transactional
 	@PutMapping("/departments")
 	public ResponseEntity<?> updateDepartment(@RequestParam Long departmentId, @RequestBody Department department){
-		Department oldDepartment=departmentRepository.findOne(departmentId);
+            	Department oldDepartment=departmentRepository.findOne(departmentId);
 		oldDepartment.setDepartmentName(department.getDepartmentName());
 		return ResponseEntity.ok("Department saved Successfully");
 	}
