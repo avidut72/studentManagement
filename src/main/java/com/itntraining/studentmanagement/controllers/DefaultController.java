@@ -20,4 +20,8 @@ public class DefaultController {
     public String getAboutPage() {
         return "about";
     }
+    @GetMapping("/student")
+    public String getStudentPage() {
+        return "student";
+    }
 }

@@ -15,7 +15,8 @@ import org.springframework.validation.BindingResult;
  * @author Avidut
  */
 public interface DepartmentService {
-    void saveDepartment(Department department,BindingResult errors);
+    //void saveDepartment(Department department,BindingResult errors);
     List<DepartmentDTO> findAllDepartments();
+    List<String> findAllDepartNames();
     
 }

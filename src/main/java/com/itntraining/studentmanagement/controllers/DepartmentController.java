@@ -28,19 +28,20 @@ public class DepartmentController {
     private DepartmentService departmentService;
 
     @PostMapping("/departments")
-//    public ResponseEntity<?> saveDepartment(@RequestBody Department department) {
-//        departmentRepository.save(department);
-//        return ResponseEntity.ok("saved");
-    public void saveDepartment(@RequestBody Department department){
-     if(department.getDepartmentId()==null){
-            departmentRepository.save(department);
-        }else{
-            Department newDepartment=departmentRepository.findOne(department.getDepartmentId());
-            newDepartment.setDepartmentName(department.getDepartmentName());
-            
-
+    public ResponseEntity<?> saveDepartment(@RequestBody Department department) {
+        departmentRepository.save(department);
+        return ResponseEntity.ok("saved");
     }
-    }
+//    public void saveDepartment(@RequestBody Department department){
+//     if(department.getDepartmentId()==null){
+//            departmentRepository.save(department);
+//        }else{
+//            Department newDepartment=departmentRepository.findOne(department.getDepartmentId());
+//            newDepartment.setDepartmentName(department.getDepartmentName());
+//            
+//
+//    }
+//    }
 
     @GetMapping("/departments")
     public ResponseEntity<?> getAllDepartments() {
@@ -48,13 +49,12 @@ public class DepartmentController {
 
     }
     @GetMapping("/departments/names")
-    public List<String> getAllDepartmentNames(){
-        System.out.println("list called");
-        return departmentRepository.findAll()
-                .stream()
-                .map(d->d.getDepartmentName())
-                .collect(Collectors.toList());
-    }
+    //public List<String> getAllDepartmentNames(){
+       // System.out.println("list called");
+        public ResponseEntity<?> getAllDepartmentNames(){
+            return ResponseEntity.ok(departmentService.findAllDepartNames());
+        }
+    
 
     @Transactional
     @PutMapping("/departments")

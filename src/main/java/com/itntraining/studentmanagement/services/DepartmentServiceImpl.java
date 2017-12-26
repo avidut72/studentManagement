@@ -5,8 +5,8 @@
  */
 package com.itntraining.studentmanagement.services;
 
-import com.example.demo.exception.InvalidRequestException;
-import com.itntraining.studentmanagement.validation.DepartmentValidator;
+//import com.example.demo.exception.InvalidRequestException;
+//import com.itntraining.studentmanagement.validation.DepartmentValidator;
 import com.itntraining.studentmanagement.DepartmentDTO;
 import com.itntraining.studentmanagement.StudentDTO;
 import com.itntraining.studentmanagement.entities.Department;
@@ -29,15 +29,15 @@ public class DepartmentServiceImpl implements DepartmentService{
     @Autowired
     DepartmentRepository departmentRepository;
     @Autowired
-    private DepartmentValidator departmentValidator;
-    @Override
-    public void saveDepartment(Department department, BindingResult errors) {
-        departmentValidator.validate(department, errors);
-        if(errors.hasErrors()){
-            throw new InvalidRequestException(errors);
-        }
-        departmentRepository.save(department);
-    }
+    //private DepartmentValidator departmentValidator;
+//    @Override
+//    public void saveDepartment(Department department, BindingResult errors) {
+//        departmentValidator.validate(department, errors);
+//        if(errors.hasErrors()){
+//            throw new InvalidRequestException(errors);
+//        }
+//        departmentRepository.save(department);
+//    }
      @Override
     public List<DepartmentDTO> findAllDepartments() {
         List<Department> departmentList=departmentRepository.findAll();
@@ -64,6 +64,14 @@ public class DepartmentServiceImpl implements DepartmentService{
        dto.setStudentList(studentList);
        return dto;
    }; 
+
+    @Override
+    public List<String> findAllDepartNames() {
+     return departmentRepository.findAll()
+                .stream()
+                .map(d->d.getDepartmentName())
+                .collect(Collectors.toList());
+    }
 
     
 

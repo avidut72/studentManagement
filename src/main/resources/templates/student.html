@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Student Mnagement Page</title>
+	<div th:replace="fragments/header :: header-css" />
+</head>
+<body>
+	<div th:replace="fragments/header :: header" />
+    <div class="container">
+    	<h1>Student management page</h1>
+    <form>
+    	<div id="successMessage"></div>
+    	<div class="col-md-4">
+    		<div class="form-group">
+    			<input type="text" id="firstName" placeholder="Enter first Name" class="form-control"/>
+    		</div>
+    		<div class="form-group">
+    			<input type="text" id="lastName" placeholder="Enter last Name" class="form-control"/>
+    		</div>
+    		<div class="form-group">
+    			<input type="text" id="address" placeholder="Enter Address" class="form-control"/>
+    		</div>
+    		<label for="sel1">Select Department(select one):</label>
+    		<select id="select" style="width: 250px;">
+    			<option selected="selected" >Please select one value</option>
+    		</select>
+    		
+    	</div>
+    </form>
+    <button type="Submit" onclick="save()" class="btn btn-primary" style="width: 100px; margin-left: 10px;">Save</button>
+    <button type="Submit" class="btn btn-warning" style="width: 100px; margin-left: 10px;">Cancel</button>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+	// var Department=[];
+	// var str='';
+	$.ajax({
+		url: "/departments/names",
+		type: 'GET',
+		success: function(response){
+			//alert('success');
+			$.each(response, function(i,item){
+				$("#select").append('<option value="item.value()">'+item+'</option>');
+			})
+		},
+		error: function(response){
+		//	alert('error');
+		}
+
+	});
+})
+	function save(){
+		var student={};
+		student.firstName = $('#firstName').val();
+		student.lastName = $('#lastName').val();
+		student.address = $('#address').val();
+		student.departmentName = $('#select').find(':selected').text();
+
+		$.ajax({
+			url: '/students',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(student),
+			dataType: 'text',
+			success: function(response){
+				//alert('success');
+				$('#successMessage').html('<h1>Saved</h1>');
+			
+			},
+			error: function(response){
+				//alert('error');
+			}
+		});
+
+	}
+
+</script>
+</body>
+</html>

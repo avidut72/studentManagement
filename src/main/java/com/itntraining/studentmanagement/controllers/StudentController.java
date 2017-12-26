@@ -1,5 +1,6 @@
 package com.itntraining.studentmanagement.controllers;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.itntraining.studentmanagement.StudentDTO;
 import com.itntraining.studentmanagement.entities.Department;
 import java.util.List;
@@ -21,15 +22,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @Transactional
+
 public class StudentController {
 
     @Autowired
     private StudentRepository studentRepository;
     @Autowired
-    DepartmentRepository departmentRepository;
-
+    private DepartmentRepository departmentRepository;
+  
     @PostMapping("/students")
     public ResponseEntity<?> saveStudent(@RequestBody StudentDTO studentDTO) {
+        System.out.println("requested");
         Student student = new Student();
         student.setFirstName(studentDTO.getFirstName());
         student.setLastName(studentDTO.getLastName());
@@ -38,10 +41,10 @@ public class StudentController {
         Department department = departmentRepository.findByDepartmentName(studentDTO.getDepartmentName());
         student.setDepartment(department);
         studentRepository.save(student);
-        return ResponseEntity.ok("new student saved");
+        return ResponseEntity.ok(student);
 
     }
-
+    
     @GetMapping("/students")
     public ResponseEntity<?> getAllStudents() {
         List<Student> studentList = studentRepository.findAll();
@@ -50,6 +53,7 @@ public class StudentController {
     //@Transactional
     @PutMapping("/students")
     public ResponseEntity<?> updateStudent(@RequestParam Long studentId, @RequestBody StudentDTO studentDTO){
+    
         Student oldStudent = studentRepository.findOne(studentId);
         oldStudent.setFirstName(studentDTO.getFirstName());
         oldStudent.setLastName(studentDTO.getLastName());

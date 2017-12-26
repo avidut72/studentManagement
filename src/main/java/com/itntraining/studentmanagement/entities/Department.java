@@ -1,5 +1,6 @@
 package com.itntraining.studentmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -22,6 +23,7 @@ public class Department {
 
     @Column(name = "department_name", nullable = false, unique = true)
     private String departmentName;
+    @JsonManagedReference
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<Student> studentList = new ArrayList<>();
 

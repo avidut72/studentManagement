@@ -5,7 +5,6 @@
  */
 package com.itntraining.studentmanagement;
 
-import com.itntraining.studentmanagement.entities.Student;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +16,16 @@ public class DepartmentDTO {
   private Long departmentId;
   private String departmentName;  
   private List<StudentDTO> studentList = new ArrayList<>();
+  private int size;
+
+    public int getSize() {
+        this.size=studentList.size();
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
 
     public Long getDepartmentId() {
         return departmentId;
