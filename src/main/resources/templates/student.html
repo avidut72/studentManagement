@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Student Mnagement Page</title>
+	<title>Student Management</title>
 	<div th:replace="fragments/header :: header-css" />
 </head>
 <body>
@@ -29,6 +29,7 @@
     </form>
     <button type="Submit" onclick="save()" class="btn btn-primary" style="width: 100px; margin-left: 10px;">Save</button>
     <button type="Submit" class="btn btn-warning" style="width: 100px; margin-left: 10px;">Cancel</button>
+    <button type="Submit" onclick="receive()" class="btn btn-link" style="width: 100px; margin-left: 10px;">Download</button>
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -50,6 +51,25 @@
 
 	});
 })
+	
+	function receive(){
+		$.ajax({
+			url: '/students/export',
+			type: 'GET',
+			contentType: 'text/csv;charset=utf-8',
+            contentDisposition: 'attachment;',
+            success: function(response){
+				//alert('success');
+				$('#successMessage').html('<h1>Downloaded</h1>');
+			
+			},
+			error: function(response){
+				$('#successMessage').html('<h1>Error</h1>');
+			
+			}
+
+		});
+	}
 	function save(){
 		var student={};
 		student.firstName = $('#firstName').val();
