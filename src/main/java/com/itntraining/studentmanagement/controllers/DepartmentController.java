@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.itntraining.studentmanagement.entities.Department;
 import com.itntraining.studentmanagement.repositories.DepartmentRepository;
 import com.itntraining.studentmanagement.services.DepartmentService;
-
 @RestController
 @Transactional
 public class DepartmentController {
