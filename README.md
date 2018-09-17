@@ -1,5 +1,9 @@
 # studentManagement
-project in java 
+project in java
+
+
+
+
 Step1: Backend Project Setup
 Create spring-boot-intializer project with dependencies: a. spring-security b. spring-boot-devtools c. thymeleaf d. spring-data-jpa e. mysql-connector
 Create Entity called 'Department' with attributes departmentId and name.
